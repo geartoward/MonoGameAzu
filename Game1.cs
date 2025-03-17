@@ -13,6 +13,8 @@ public class Game1 : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
+    Texture2D baal;
+
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -35,8 +37,9 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         Texture2D balltexture = Content.Load<Texture2D>("Assets/Placeholders/player");
+        baal = Content.Load<Texture2D>("Assets/Placeholders/ball");
 
-        player = new Player(balltexture, new Vector2(500,500));
+        player = new Player(balltexture, new Vector2(500, 500));
 
     }
 
@@ -45,7 +48,7 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-            player.Update(gameTime);
+        player.Update(gameTime);
 
        base.Update(gameTime);
     }
@@ -57,6 +60,7 @@ public class Game1 : Game
         _spriteBatch.Begin();
         
         _spriteBatch.Draw(player.texture, player.position, Color.White);
+        _spriteBatch.Draw(baal, Vector2.Zero, Color.White);
 
         _spriteBatch.End();
 
