@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace AZUMANGA
 {
-    internal class Sprite {
+    public class Sprite {
         public Texture2D texture;
         public Vector2 position;
 
