@@ -10,6 +10,8 @@ public class Game1 : Game
 
     Player player;
 
+    enum PlayerStates;
+
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 

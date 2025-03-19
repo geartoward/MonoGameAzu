@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Diagnostics;
+using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace AZUMANGA {
@@ -10,47 +13,81 @@ namespace AZUMANGA {
 internal class Player : Sprite {
 
     // States for movement
-    enum PlayerStates {
+    public enum PlayerStates {
         IDLE,
         LR,
         UD
-    }
+    };
+
+    public PlayerStates currentstate = PlayerStates.IDLE;
 
     public Player(Texture2D texture, Vector2 position) : base(texture, position) {}
 
+    public GameTime gameTime;
+
     float playerspeed = 150f;
 
-    // Up down movement
-    private void Move_ud(GameTime gameTime){
-        var kstate = Keyboard.GetState();
+    public void Update(GameTime gameTime){
+        KeyboardState kstate = Keyboard.GetState();
 
-        if (kstate.IsKeyDown(Keys.Up)){
-            position.Y -= playerspeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        } 
-        
-        if (kstate.IsKeyDown(Keys.Down)){
-            position.Y += playerspeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        } 
+        float Deltatime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+        bool right = kstate.IsKeyDown(Keys.Right);
+        bool left = kstate.IsKeyDown(Keys.Left);
+        bool up = kstate.IsKeyDown(Keys.Up);
+        bool down = kstate.IsKeyDown(Keys.Down);
+
+        bool anyx = left || right;
+        bool anyy = up || down;
+
+        if (anyx){
+            currentstate = PlayerStates.LR;
+        }
+        else if (anyy){
+            currentstate = PlayerStates.UD;
+        } else {
+            currentstate = PlayerStates.IDLE;
+        }
+
+        switch(currentstate){
+            case PlayerStates.LR:
+                Update_PlayerX(right, left, Deltatime);
+            break;
+
+            case PlayerStates.UD:
+                Update_PlayerY(up, down, Deltatime);
+            break;
+
+            case PlayerStates.IDLE:
+            break;
+
+        }
+                   
 
     }
 
-    // Left right movement
-    private void Move_lr(GameTime gameTime){
-        var kstate = Keyboard.GetState();
+    private void Update_PlayerY(bool up, bool down, float Deltatime){
 
-        if (kstate.IsKeyDown(Keys.Right)){
-            position.X += playerspeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (up){
+            position.Y -= playerspeed * Deltatime;
+        }
+        
+        else if (down){
+            position.Y += playerspeed * Deltatime;
+        }
+
+    }
+    private void Update_PlayerX(bool left, bool right, float Deltatime){
+        if (left){
+            position.X += playerspeed * Deltatime;
         } 
         
-        if (kstate.IsKeyDown(Keys.Left)){
-            position.X -= playerspeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        } 
+        else if (right){
+            position.X -= playerspeed * Deltatime;
+        }
     }
     
 
-    public void Update(GameTime gameTime){
-
-    }
 
 }
 }
