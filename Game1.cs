@@ -24,7 +24,7 @@ public class Game1 : Game
 
     private Vector3 cameraTopDownPosition = new Vector3(0.0f, 25000.0f, 1.0f);
 
-    Texture2D baal;
+    Texture2D bg;
 
     public Game1()
     {
@@ -49,22 +49,25 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         Texture2D balltexture = Content.Load<Texture2D>("Assets/Placeholders/player");
-        baal = Content.Load<Texture2D>("Assets/Placeholders/ball");
 
         spfont = Content.Load<SpriteFont>("Assets/Fonts/gamefont");
         fontpos = new Vector2(0,0);
 
         player = new Player(balltexture, new Vector2(0,0));
 
+        bg = Content.Load<Texture2D>("Assets/Placeholders/bgs/bg");
+
     }
 
     protected override void Update(GameTime gameTime)
     {
+
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
         if (Keyboard.GetState().IsKeyDown(Keys.A)) {
             ScreenState_current = ScreenState.GAME;
+
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.B)) {
@@ -122,7 +125,7 @@ public class Game1 : Game
 
         _spriteBatch.Begin(transformMatrix: camera2d.viewMatrix);
 
-        _spriteBatch.Draw(baal, Vector2.Zero, Color.White);
+        _spriteBatch.Draw(bg, new Vector2(-960,-540), Color.White);
         _spriteBatch.Draw(player.texture, player.position, Color.White);
 
         _spriteBatch.End();
