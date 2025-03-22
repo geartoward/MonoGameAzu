@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using static AZUMANGA.ScreenManager;
 
 namespace AZUMANGA {
 
@@ -10,7 +11,9 @@ public class Game1 : Game
     Camera camera2d;
     Player player;
 
-    enum PlayerStates;
+    ScreenManager screenmanager;
+
+    public ScreenState ScreenState_current = ScreenState.TITLE;
 
     SpriteFont spfont;
 
@@ -60,6 +63,14 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        if (Keyboard.GetState().IsKeyDown(Keys.A)) {
+            ScreenState_current = ScreenState.GAME;
+        }
+
+        if (Keyboard.GetState().IsKeyDown(Keys.B)) {
+            ScreenState_current = ScreenState.ENDING;
+        }
+
         
         player.Update(gameTime);
 
@@ -75,6 +86,30 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
+        switch (ScreenState_current)
+        {
+            case ScreenState.TITLE:
+                IntroDraw();
+            break;
+
+            case ScreenManager.ScreenState.GAME:
+                GameDraw(gameTime);
+            break;
+
+            case ScreenState.ENDING:
+                EndDraw();
+            break;
+
+            default:
+            break;
+            
+        }
+        
+
+        base.Draw(gameTime);
+    }
+
+    protected void GameDraw(GameTime gameTime){
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         string text = "This is the game";
@@ -91,8 +126,29 @@ public class Game1 : Game
         _spriteBatch.Draw(player.texture, player.position, Color.White);
 
         _spriteBatch.End();
+    }
 
-        base.Draw(gameTime);
+    protected void IntroDraw(){
+        GraphicsDevice.Clear(Color.Green);
+
+        string textintro = "Presss A to enter";
+
+        _spriteBatch.Begin();
+
+        _spriteBatch.DrawString(spfont, textintro, new Vector2(360,384), Color.White);
+        _spriteBatch.End();
+
+    }
+
+    protected void EndDraw(){
+        GraphicsDevice.Clear(Color.Red);
+
+        string textend = "Cool now gtfo";
+
+        _spriteBatch.Begin();
+
+        _spriteBatch.DrawString(spfont, textend, new Vector2(360,384), Color.White);
+        _spriteBatch.End();
     }
 }
 }

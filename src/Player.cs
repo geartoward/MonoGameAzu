@@ -23,9 +23,7 @@ internal class Player : Sprite {
 
     public Player(Texture2D texture, Vector2 position) : base(texture, position) {}
 
-    public GameTime gameTime;
-
-    float playerspeed = 150f;
+    float playerspeed = 300f;
 
     public void Update(GameTime gameTime){
         KeyboardState kstate = Keyboard.GetState();
