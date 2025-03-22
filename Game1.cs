@@ -7,13 +7,15 @@ namespace AZUMANGA {
 
 public class Game1 : Game
 {
-
+    Camera camera2d;
     Player player;
 
     enum PlayerStates;
 
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+
+    private Vector3 cameraTopDownPosition = new Vector3(0.0f, 25000.0f, 1.0f);
 
     Texture2D baal;
 
@@ -27,6 +29,7 @@ public class Game1 : Game
     protected override void Initialize()
     {
 
+        camera2d = new Camera(GraphicsDevice.Viewport);
         _graphics.PreferredBackBufferWidth = 1024;
         _graphics.PreferredBackBufferHeight = 768;
         _graphics.ApplyChanges();
@@ -41,7 +44,7 @@ public class Game1 : Game
         Texture2D balltexture = Content.Load<Texture2D>("Assets/Placeholders/player");
         baal = Content.Load<Texture2D>("Assets/Placeholders/ball");
 
-        player = new Player(balltexture, new Vector2(500, 500));
+        player = new Player(balltexture, new Vector2(0,0));
 
     }
 
@@ -50,7 +53,15 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        
         player.Update(gameTime);
+
+        Vector2 characterCenter = new Vector2(
+            player.position.X + player.texture.Width / 2,
+            player.position.Y + player.texture.Height / 2
+        );
+
+        camera2d.Update(characterCenter);
 
        base.Update(gameTime);
     }
@@ -59,7 +70,7 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        _spriteBatch.Begin();
+        _spriteBatch.Begin(transformMatrix: camera2d.viewMatrix);
         
         _spriteBatch.Draw(player.texture, player.position, Color.White);
         _spriteBatch.Draw(baal, Vector2.Zero, Color.White);
