@@ -12,6 +12,10 @@ public class Game1 : Game
 
     enum PlayerStates;
 
+    SpriteFont spfont;
+
+    Vector2 fontpos;
+
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
@@ -44,6 +48,9 @@ public class Game1 : Game
         Texture2D balltexture = Content.Load<Texture2D>("Assets/Placeholders/player");
         baal = Content.Load<Texture2D>("Assets/Placeholders/ball");
 
+        spfont = Content.Load<SpriteFont>("Assets/Fonts/gamefont");
+        fontpos = new Vector2(0,0);
+
         player = new Player(balltexture, new Vector2(0,0));
 
     }
@@ -70,10 +77,18 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
+        string text = "This is the game";
+
+        _spriteBatch.Begin();
+
+        _spriteBatch.DrawString(spfont, text, new Vector2(10,10), Color.White);
+        _spriteBatch.End();
+
+
         _spriteBatch.Begin(transformMatrix: camera2d.viewMatrix);
-        
-        _spriteBatch.Draw(player.texture, player.position, Color.White);
+
         _spriteBatch.Draw(baal, Vector2.Zero, Color.White);
+        _spriteBatch.Draw(player.texture, player.position, Color.White);
 
         _spriteBatch.End();
 
