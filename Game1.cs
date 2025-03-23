@@ -14,7 +14,8 @@ public class Game1 : Game
 {
     TiledMap _tiledMap;
     TiledMapRenderer _tiledMapRenderer;
-    private OrthographicCamera _camera;
+
+    Camera camera2d;
     Player player;
 
     public ScreenState ScreenState_current = ScreenState.TITLE;
@@ -40,13 +41,10 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-
+        camera2d = new Camera(GraphicsDevice.Viewport);
         _graphics.PreferredBackBufferWidth = 1024;
         _graphics.PreferredBackBufferHeight = 768;
         _graphics.ApplyChanges();
-
-        var viewportadapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1024, 768);
-        _camera = new OrthographicCamera(viewportadapter);
 
         base.Initialize();
     }
@@ -92,10 +90,9 @@ public class Game1 : Game
             player.position.Y + player.texture.Height / 2
         );
 
+        camera2d.Update(characterCenter);
 
         _tiledMapRenderer.Update(gameTime);
-        _camera.LookAt(player.position);
-        _cameraPosition = player.position;
 
         base.Update(gameTime);
     }
@@ -128,9 +125,9 @@ public class Game1 : Game
     protected void GameDraw(GameTime gameTime){
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        _spriteBatch.Begin();
+        _spriteBatch.Begin(transformMatrix: camera2d.viewMatrix);
 
-        _tiledMapRenderer.Draw(_camera.GetViewMatrix());
+        _tiledMapRenderer.Draw(camera2d.viewMatrix);
         _spriteBatch.Draw(player.texture, player.position, Color.White);
 
         _spriteBatch.End();
