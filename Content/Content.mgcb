@@ -10,17 +10,34 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:../pipeline-references/MonoGame.Extended.Content.Pipeline.dll
+/reference:../pipeline-references/MonoGame.Extended.dll
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Assets/Fonts/gamefont.spritefont
+#begin Fonts/gamefont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Assets/Fonts/gamefont.spritefont
+/build:Fonts/gamefont.spritefont
 
-#begin Assets/Placeholders/ball.png
+#begin Maps/map1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/map1.tmx
+
+#begin Maps/map1.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/map1.tmx
+
+#begin Maps/tileset.tsx
+/importer:TiledMapTilesetImporter
+/processor:TiledMapTilesetProcessor
+/build:Maps/tileset.tsx
+
+#begin Placeholders/ball.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -30,9 +47,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Assets/Placeholders/ball.png
+/build:Placeholders/ball.png
 
-#begin Assets/Placeholders/bgs/bg.png
+#begin Placeholders/bgs/bg.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -42,9 +59,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Assets/Placeholders/bgs/bg.png
+/build:Placeholders/bgs/bg.png
 
-#begin Assets/Placeholders/player.png
+#begin Placeholders/player.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -54,5 +71,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Assets/Placeholders/player.png
+/build:Placeholders/player.png
 

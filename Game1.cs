@@ -3,15 +3,19 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using static AZUMANGA.ScreenManager;
+using MonoGame.Extended;
+using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Renderers;
+using MonoGame.Extended.ViewportAdapters;
 
 namespace AZUMANGA {
 
 public class Game1 : Game
 {
-    Camera camera2d;
+    TiledMap _tiledMap;
+    TiledMapRenderer _tiledMapRenderer;
+    private OrthographicCamera _camera;
     Player player;
-
-    ScreenManager screenmanager;
 
     public ScreenState ScreenState_current = ScreenState.TITLE;
 
@@ -25,6 +29,7 @@ public class Game1 : Game
     private Vector3 cameraTopDownPosition = new Vector3(0.0f, 25000.0f, 1.0f);
 
     Texture2D bg;
+    private Vector2 _cameraPosition;
 
     public Game1()
     {
@@ -36,10 +41,12 @@ public class Game1 : Game
     protected override void Initialize()
     {
 
-        camera2d = new Camera(GraphicsDevice.Viewport);
         _graphics.PreferredBackBufferWidth = 1024;
         _graphics.PreferredBackBufferHeight = 768;
         _graphics.ApplyChanges();
+
+        var viewportadapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1024, 768);
+        _camera = new OrthographicCamera(viewportadapter);
 
         base.Initialize();
     }
@@ -48,14 +55,17 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        Texture2D balltexture = Content.Load<Texture2D>("Assets/Placeholders/player");
+        Texture2D balltexture = Content.Load<Texture2D>("Placeholders/player");
 
-        spfont = Content.Load<SpriteFont>("Assets/Fonts/gamefont");
+        spfont = Content.Load<SpriteFont>("Fonts/gamefont");
         fontpos = new Vector2(0,0);
 
-        player = new Player(balltexture, new Vector2(0,0));
+        player = new Player(balltexture, Vector2.Zero);
 
-        bg = Content.Load<Texture2D>("Assets/Placeholders/bgs/bg");
+        bg = Content.Load<Texture2D>("Placeholders/bgs/bg");
+
+        _tiledMap = Content.Load<TiledMap>("Maps/map1");
+        _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _tiledMap);
 
     }
 
@@ -82,9 +92,12 @@ public class Game1 : Game
             player.position.Y + player.texture.Height / 2
         );
 
-        camera2d.Update(characterCenter);
 
-       base.Update(gameTime);
+        _tiledMapRenderer.Update(gameTime);
+        _camera.LookAt(player.position);
+        _cameraPosition = player.position;
+
+        base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
@@ -115,19 +128,18 @@ public class Game1 : Game
     protected void GameDraw(GameTime gameTime){
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
+        _spriteBatch.Begin();
+
+        _tiledMapRenderer.Draw(_camera.GetViewMatrix());
+        _spriteBatch.Draw(player.texture, player.position, Color.White);
+
+        _spriteBatch.End();
+
         string text = "This is the game";
 
         _spriteBatch.Begin();
 
         _spriteBatch.DrawString(spfont, text, new Vector2(10,10), Color.White);
-        _spriteBatch.End();
-
-
-        _spriteBatch.Begin(transformMatrix: camera2d.viewMatrix);
-
-        _spriteBatch.Draw(bg, new Vector2(-960,-540), Color.White);
-        _spriteBatch.Draw(player.texture, player.position, Color.White);
-
         _spriteBatch.End();
     }
 
@@ -153,5 +165,6 @@ public class Game1 : Game
         _spriteBatch.DrawString(spfont, textend, new Vector2(360,384), Color.White);
         _spriteBatch.End();
     }
+
 }
 }
